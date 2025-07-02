@@ -95,15 +95,15 @@ console.log("🔁 서버 응답:", res.data);
         <div style={styles.snsContainer}>
           <button onClick={() => window.location.href = KAKAO_AUTH_URL} style={styles.snsButton}>
             <img src="/kakao.png" alt="카카오 로그인" style={styles.icon} />
-            <p>카카오 계정으로 로그인</p>
+            <p style={{ fontSize: '14px' }}>카카오 계정으로 로그인</p>
           </button>
           <button onClick={() => window.location.href = NAVER_AUTH_URL} style={styles.snsButton}>
             <img src="/naver.png" alt="네이버 로그인" style={styles.icon} />
-            <p>네이버 계정으로 로그인</p>
+            <p style={{ fontSize: '14px' }}>네이버 계정으로 로그인</p>
           </button>
           <button onClick={() => window.location.href = GOOGLE_AUTH_URL} style={styles.snsButton}>
             <img src="/google.png" alt="구글 로그인" style={styles.iconSmall} />
-            <p>Google 계정으로 로그인</p>
+            <p style={{ fontSize: '14px' }}>Google 계정으로 로그인</p>
           </button>
 
           <div style={styles.signupBox}>
@@ -143,7 +143,7 @@ const buttonStyle = {
   width: '78px',
   padding: '13px',
   borderRadius: '8px',
-  backgroundColor: '#F35748',
+  backgroundColor: '#ED6051',
   color: 'white',
   fontWeight: 'bold',
   border: 'none',

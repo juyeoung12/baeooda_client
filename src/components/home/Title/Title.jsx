@@ -134,7 +134,7 @@ const Title = () => {
           />
 
           {/* 자동완성 & 최근 검색어 */}
-          {isFocused && (
+          {isFocused && (suggestions.length > 0 || recentKeywords.length > 0) && (
             <div style={{
               position: 'absolute',
               top: '60px',

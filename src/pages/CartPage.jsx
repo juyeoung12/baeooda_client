@@ -147,16 +147,16 @@ const CartPage = () => {
 
           {cartItems.length === 0 ? (
             <div style={{ padding: '60px', textAlign: 'center', border: '1px solid #ddd', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
-              <img src="/icons/empty-cart.svg" alt="빈 장바구니" style={{ width: '120px', marginBottom: '20px', opacity: 0.5 }} />
+              {/* <img src="/icons/empty-cart.svg" alt="빈 장바구니" style={{ width: '120px', marginBottom: '20px', opacity: 0.5 }} /> */}
               <p style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>장바구니가 비어있어요.</p>
-              <a href="/" style={{ marginTop: '30px', backgroundColor: '#F35748', color: '#fff', padding: '12px 24px', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-block', textDecoration: 'none' }}>강의 보러 가기</a>
+              <a href="/" style={{ marginTop: '22px', backgroundColor: '#ED6051', color: '#fff', padding: '12px 24px', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer', display: 'inline-block', textDecoration: 'none' }}>강의 보러 가기</a>
             </div>
           ) : (
             <>
               <div style={{ marginBottom: '7px', display: 'flex', gap: '15px', alignItems: 'center' }}>
                 <input type="checkbox" onChange={handleSelectAll} checked={selectedIds.length === cartItems.length && cartItems.length > 0} />
                 <span>전체 선택</span>
-                <button onClick={handleDeleteSelected} style={{ marginLeft: 'auto', fontSize: '14px' }}>선택 삭제</button>
+                <button onClick={handleDeleteSelected} style={{ marginLeft: 'auto', fontSize: '13px' }}>선택 삭제</button>
               </div>
 
               <hr style={{ margin: 0, borderBottom: '1px solid #ccc' }} />
@@ -165,10 +165,10 @@ const CartPage = () => {
                 <div key={item.id} style={{ display: 'flex', borderBottom: '1px solid #ccc', padding: '20px 0', alignItems: 'center', gap: '20px', position: 'relative' }}>
                   <input type="checkbox" checked={selectedIds.includes(item.id)} onChange={() => handleCheckboxChange(item.id)} />
                   <a href={`/courses/${encodeURIComponent(item.title)}`} target="_blank" rel="noopener noreferrer">
-                    <img src={item.image} alt={item.title} width="120" height="72" style={{ borderRadius: '8px' }} />
+                    <img src={item.image} alt={item.title} width="170" height="100" style={{ objectFit: 'cover', borderRadius: '8px' }} />
                   </a>
                   <div style={{ flex: 1 }}>
-                    <a href={`/courses/${encodeURIComponent(item.title)}`} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px', display: 'inline-block', textDecoration: 'none', color: 'black' }}>{item.title}</a>
+                    <a href={`/courses/${encodeURIComponent(item.title)}`} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '5px', display: 'inline-block', textDecoration: 'none', color: 'black' }}>{item.title}</a>
                     <div style={{ color: '#777', fontSize: '14px', marginBottom: '10px' }}>{item.author}</div>
                     <select value={item.option} onChange={(e) => handleOptionChange(item.id, e.target.value)} style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc', backgroundColor: 'white' }}>
                       <option value="1년 수강">1년 수강</option>
@@ -191,7 +191,7 @@ const CartPage = () => {
             <p style={{ fontWeight: 'bold', fontSize: '16px', margin: '0' }}>총 결제 금액</p>
             <p style={{ fontSize: '18px', fontWeight: 'bold', margin: '0' }}>₩{totalSelectedPrice.toLocaleString()}</p>
           </div>
-          <button onClick={handlePayment} disabled={selectedIds.length === 0} style={{ backgroundColor: selectedIds.length === 0 ? '#ccc' : '#F35748', color: '#fff', width: '100%', padding: '15px', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer' }}>결제 하기</button>
+          <button onClick={handlePayment} disabled={selectedIds.length === 0} style={{ backgroundColor: selectedIds.length === 0 ? '#ccc' : '#ED6051', color: '#fff', width: '100%', padding: '15px', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: selectedIds.length === 0 ? 'not-allowed' : 'pointer' }}>결제 하기</button>
           <p style={{ fontSize: '12px', color: '#999', marginTop: '15px' }}>회원 본인은 주문 내용을 확인했으며, 구매조건 및 개인정보처리방침과 결제에 동의합니다.</p>
         </div>
       </div>

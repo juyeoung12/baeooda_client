@@ -2,12 +2,32 @@ import React, { useState, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { allCourses } from '../data/dummyCourses'; // ✅ named import
 
-
 const iconMenuList = [
-  { label: '미리보기', icon: '/icons/d_preview.svg', size: 35 },
-  { label: '찜하기', icon: '/icons/d_heart.svg', size: 28 },
-  { label: '공유하기', icon: '/icons/d_share.svg', size: 25 },
+  {
+    label: '미리보기',
+    icon: '/icons/d_preview.svg',
+    action: () => setIsModalOpen(true),
+  },
+  {
+    label: '찜하기',
+    icon: '/icons/d_heart.svg',
+    action: () => alert('찜하기 기능은 준비 중입니다.'),
+  },
+  {
+    label: '공유하기',
+    icon: '/icons/d_share.svg',
+    action: () => {
+      const currentUrl = window.location.href;
+      navigator.clipboard.writeText(currentUrl)
+        .then(() => setIsShareModalOpen(true))
+        .catch(err => {
+          console.error('링크 복사 실패:', err);
+          alert('링크 복사에 실패했습니다.');
+        });
+    },
+  }
 ];
+
 
 const CoursedetailPage = () => {
   const [activeTab, setActiveTab] = useState('intro');
@@ -17,12 +37,13 @@ const CoursedetailPage = () => {
   const [selectedOption, setSelectedOption] = useState('1년 수강');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const introRef = useRef(null);
   const curriculumRef = useRef(null);
 
 const course = allCourses.find((c) => c.title === title);
 const { desc, detailImage: stateDetailImage } = location.state || {};
-const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 추가
+const overlaySub = location.state?.overlaySub || course?.author;
   const actualDetailImage = stateDetailImage || course?.detailImage || course?.image || '/images/default.jpg';
   const { level, day } = course?.info || {};
   const options = course?.options || {};
@@ -77,7 +98,7 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
                 backgroundPosition: 'center',
               }}
             >
-            {(desc || course?.desc) && (
+            {/* {(desc || course?.desc) && (
               <div
                 style={{
                   position: 'absolute',
@@ -93,20 +114,25 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
               >
                 {desc || course?.desc}
               </div>
-            )}
+            )} */}
 
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'end', gap: '24px', padding: '0 45px', fontSize: '16px', backgroundColor: '#fff', borderTop: '1px solid #eee', height: '66px', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '0 45px', fontSize: '16px', backgroundColor: '#fff', borderTop: '1px solid #eee', height: '66px' }}>
+          </div>
+            <div style={{ display: 'flex', justifyContent: 'end', gap: '24px', fontSize: '16px', backgroundColor: '#fff', borderTop: '1px solid #eee', height: '66px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '0 40px', fontSize: '16px', backgroundColor: '#fff', borderTop: '1px solid #eee', height: '66px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '13px' }}>
-                  <img src={`/icons/level${level === '초급' ? 1 : level === '중급' ? 2 : level === '고급' ? 3 : 1}.svg`} alt="레벨 아이콘" style={{ width: '23px', height: '23px', marginBottom: '2px' }} />
-                  <span style={{marginRight: '3px'}}>난이도</span> {level || '정보 없음'}
+                  <img src={`/icons/level${level === '초급' ? 1 : level === '중급' ? 2 : level === '고급' ? 3 : 1}.svg`} alt="레벨 아이콘" style={{ width: '20px', height: '20px', marginBottom: '2px' }} />
+                  {/* <span style={{ fontSize: '14px' }}>난이도</span> */}
+                  <span style={{ fontSize: '14px', color: '#666666' }}>{level || '정보 없음'}</span>
                 </div>
-                <div style={{ color: '#898989', fontSize: '16px' }}>ㅣ </div>
+
+                <div style={{ color: '#ccc', fontSize: '16px' }}>ㅣ </div>
+
                 <div style={{ display: 'flex', alignItems: 'center', gap: '13px' }}>
-                  <img src="/icons/time.svg" alt="소요시간 아이콘" style={{ width: '23px', height: '23px' }} />
-                  <span style={{marginRight: '3px'}}>소요 시간</span> {day || '정보 없음'}
+                  <img src="/icons/time.svg" alt="소요시간 아이콘" style={{ width: '20px', height: '20px' }} />
+                  {/* <span style={{ fontSize: '14px' }}>소요 시간</span> */}
+                  <span style={{ fontSize: '14px', color: '#666666' }}>{day || '정보 없음'}</span>
                 </div>
+
               </div>
             </div>
           </div>
@@ -301,14 +327,14 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
               backgroundColor: '#fff',
               fontFamily: 'sans-serif',
               maxWidth: '390px',
-              padding: '35px 40px',
+              padding: '40px 34px',
               boxSizing: 'border-box',
             }}
           >
-            <h2 style={{ fontSize: '20px', fontWeight: '600', margin: '0' }}>
+            <h2 style={{ fontSize: '19px', fontWeight: '600', margin: '0' }}>
               {title || '강의 제목'}
             </h2>
-            <div style={{ fontSize: '14px', color: '#444', margin: '20px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ fontSize: '14px', color: '#444', margin: '20px 0px 35px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img src="/icons/loginprofil1.svg" alt="프로필사진" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
               {overlaySub || '강사명'}
             </div>
@@ -322,23 +348,23 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
                   onClick={() => setSelectedOption(optionKey)}
                   style={{
                     width: '100%',
-                    padding: '17px 25px',
+                    padding: '17px 27px',
                     fontSize: '14px',
-                    fontWeight: 'bold',
+                    fontWeight: '500',
                     borderRadius: '8px',
-                    border: selectedOption === optionKey ? '2px solid #f35748' : '2px solid #ccc',
-                    backgroundColor: selectedOption === optionKey ? 'rgb(255, 239, 233)' : '#fff',
+                    border: selectedOption === optionKey ? '2px solid #ED6051' : '2px solid #ccc',
+                    backgroundColor: selectedOption === optionKey ? '#FFF4EF' : '#fff',
                     marginBottom: '7px',
                     cursor: 'pointer',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>{optionKey}</span>
+                    <span style={{ fontSize:'14.5px' }}>{optionKey}</span>
                     <span>
-                      <span style={{ textDecoration: 'line-through', color: '#aaa', marginRight: '5px' }}>
+                      <span style={{ textDecoration: 'line-through', color: '#aaa', marginRight: '10px', fontWeight: '500' }}>
                         ₩{option?.original?.toLocaleString() || '0'}
                       </span>
-                      <span style={{ color: '#000' }}>₩{option?.sale?.toLocaleString() || '0'}</span>
+                      <span style={{ color: '#000', fontSize:'15px', fontWeight: '600', }}>₩{option?.sale?.toLocaleString() || '0'}</span>
                     </span>
                   </div>
                 </button>
@@ -348,15 +374,16 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
             <button
               onClick={handleAddToCart}
               style={{
+                fontFamily: 'Noto Sans KR',
                 width: '100%',
                 padding: '20px 0',
-                backgroundColor: '#F35748',
+                backgroundColor: '#ED6051',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
-                fontWeight: 'bold',
-                fontSize: '15px',
-                marginBottom: '9px',
+                fontWeight: '600',
+                fontSize: '17px',
+                margin: '5px 0',
                 cursor: 'pointer',
               }}
             >
@@ -366,24 +393,62 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
             {/* 장바구니 팝업 모달 */}
             {isCartModalOpen && (
               <div style={{
-                position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.4)',
-                display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999
+                position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                backgroundColor: 'rgba(0,0,0,0.4)', display: 'flex',
+                justifyContent: 'center', alignItems: 'center', zIndex: 9999
               }}>
-                <div style={{ background: '#fff', padding: '30px 40px', borderRadius: '10px', maxWidth: '400px', textAlign: 'center' }}>
-                  <h3 style={{ marginBottom: '20px' }}>장바구니에 담겼습니다!</h3>
+                <div style={{
+                  position: 'relative',
+                  background: '#fff',
+                  padding: '30px 40px',
+                  borderRadius: '10px',
+                  maxWidth: '400px',
+                  textAlign: 'center'
+                }}>
+                  {/* X 닫기 버튼 */}
+                  <button
+                    onClick={() => setIsCartModalOpen(false)}
+                    style={{
+                      position: 'absolute',
+                      top: '5px',
+                      right: '0px',
+                      background: 'transparent',
+                      border: 'none',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                      color: '#999'
+                    }}
+                    aria-label="닫기"
+                  >
+                    ✕
+                  </button>
+
+                  <h3 style={{ marginBottom: '23px', fontSize: '15px' }}>장바구니에 담겼습니다!</h3>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
                     <button
                       onClick={() => {
                         setIsCartModalOpen(false);
                         navigate('/cart');
                       }}
-                      style={{ padding: '10px 20px', backgroundColor: '#F35748', color: '#fff', borderRadius: '6px', fontWeight: 'bold' }}
+                      style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#ED6051',
+                        color: '#fff',
+                        borderRadius: '6px',
+                        fontSize: '14px'
+                      }}
                     >
                       장바구니로 이동
                     </button>
                     <button
                       onClick={() => setIsCartModalOpen(false)}
-                      style={{ padding: '10px 20px', backgroundColor: '#eee', color: '#333', borderRadius: '6px', fontWeight: 'bold' }}
+                      style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#eee',
+                        color: '#333',
+                        borderRadius: '6px',
+                        fontSize: '14px'
+                      }}
                     >
                       계속 쇼핑하기
                     </button>
@@ -392,8 +457,15 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
               </div>
             )}
 
-            {/*💖수정💖 아이콘 메뉴 */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+            {/* 아이콘 메뉴 */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '40px',
+              marginTop: '17px'
+            }}>
               {iconMenuList.map(({ label, icon, size }) => (
                 <button
                   key={label}
@@ -403,9 +475,7 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
                     } else if (label === '공유하기') {
                       const currentUrl = window.location.href;
                       navigator.clipboard.writeText(currentUrl)
-                        .then(() => {
-                          alert('페이지 링크가 복사되었습니다');
-                        })
+                        .then(() => setIsShareModalOpen(true))
                         .catch((err) => {
                           console.error('링크 복사 실패:', err);
                           alert('링크 복사에 실패했습니다.');
@@ -419,20 +489,30 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
                     backgroundColor: 'transparent',
                     border: 'none',
                     cursor: 'pointer',
-                    height: '75px',
-                    marginBottom: label === '미리보기' ? '10px' : undefined,
-                    marginTop: label === '공유하기' ? '8px' : undefined,
+                    padding: 0,
+                    color: '#999',
+                    fontSize: '13px',
                   }}
                 >
-                  <img src={icon} alt={label} style={{ width: `${size}px`, height: `${size}px`, marginBottom: '5px' }} />
-                  <span style={{ color: '#888', fontSize: '13px' }}>{label}</span>
+                  <img
+                    src={icon}
+                    alt={label}
+                    style={{
+                      width: `${size}px`,
+                      height: `${size}px`,
+                      marginBottom: '6px',
+                      filter: 'grayscale(100%)' // 선택적: 회색 톤으로 통일
+                    }}
+                  />
+                  <span>{label}</span>
                 </button>
               ))}
             </div>
+
           </div>
         </aside>
 
-        {/* 미리보기 영상 */}
+        {/* 미리보기 팝업 */}
         {isModalOpen && (
           <div style={{
             position: 'fixed',
@@ -448,38 +528,146 @@ const overlaySub = location.state?.overlaySub || course?.author; // ✅ 이 줄 
           }}>
             <div style={{
               position: 'relative',
-              width: '80%',
-              maxWidth: '720px',
+              width: '90%',
+              maxWidth: '640px',
               backgroundColor: '#fff',
-              borderRadius: '8px',
-              overflow: 'hidden',
+              borderRadius: '14px',
+              padding: '32px',
+              textAlign: 'left',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
             }}>
+              {/* 닫기 버튼 */}
               <button
                 onClick={() => setIsModalOpen(false)}
                 style={{
                   position: 'absolute',
-                  top: '10px',
-                  right: '10px',
+                  top: '16px',
+                  right: '20px',
                   background: 'transparent',
                   border: 'none',
-                  fontSize: '20px',
-                  color: '#aaa',
+                  fontSize: '18px',
+                  color: '#333',
+                  cursor: 'pointer'
+                }}
+                aria-label="닫기"
+              >
+                ✕
+              </button>
+
+              {/* 제목 */}
+              <h2 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0px' }}>
+                클래스 미리보기
+              </h2>
+
+              {/* 소제목 */}
+              <p style={{ fontSize: '14px', color: '#444', marginBottom: '20px' }}>
+                1. 인공지능/파이썬 시작과 개발 환경
+              </p>
+
+              {/* 비디오 */}
+              <div style={{ borderRadius: '8px', overflow: 'hidden' }}>
+                <video
+                  controls
+                  autoPlay
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                >
+                  <source src="/videos/preview.mp4" type="video/mp4" />
+                  미리보기 영상을 지원하지 않는 브라우저입니다.
+                </video>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 공유하기 팝업 */}
+        {isShareModalOpen && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0,
+            width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 10000
+          }}>
+            <div style={{
+              position: 'relative',
+              background: '#fff',
+              padding: '30px 20px',
+              borderRadius: '12px',
+              textAlign: 'center',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+              width: '380px',
+              border: '1px solid #ddd'
+            }}>
+              {/* X 닫기 버튼 */}
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '14px',
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '18px',
                   cursor: 'pointer',
+                  color: '#999'
                 }}
               >
                 ✕
               </button>
-              <video
-                controls
-                autoPlay
-                style={{ width: '100%', height: 'auto' }}
-              >
-                <source src="/videos/preview.mp4" type="video/mp4" />
-                미리보기 영상을 지원하지 않는 브라우저입니다.
-              </video>
+
+              {/* 텍스트 */}
+              <p style={{ marginBottom: '20px', fontSize: '16px', fontWeight: 'bold' }}>
+                페이지 링크가 복사되었습니다!
+              </p>
+
+              {/* 링크 + 공유 버튼 (분리된 구조) */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: '#f1f1f1',
+                borderRadius: '10px',
+                padding: '10px',
+                fontSize: '14px',
+                userSelect: 'text',
+              }}>
+                {/* 링크 영역 (스크롤 가능) */}
+                <div
+                  style={{
+                    overflowX: 'auto',
+                    whiteSpace: 'nowrap',
+                    flex: 1,
+                    scrollbarWidth: 'none', // Firefox
+                    msOverflowStyle: 'none', // IE/Edge
+                  }}
+                  className="no-scrollbar"
+                >
+                  <span>{window.location.href}</span>
+                </div>
+
+                {/* 공유 아이콘 버튼 (고정 위치) */}
+                <button
+                  style={{
+                    marginLeft: '10px',
+                    backgroundColor: '#888',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '5px',
+                    cursor: 'pointer',
+                    flexShrink: 0
+                  }}
+                  aria-label="복사됨"
+                >
+                  <img src="/icons/d_share.svg" alt="복사 아이콘" style={{ width: '16px', height: '16px' }} />
+                </button>
+              </div>
+
             </div>
           </div>
         )}
+
       </div>
     </section>
   );
@@ -508,11 +696,12 @@ const dotItemStyle = {
 };
 const dotstyle = {
  color: '#5584B0',
- fontSize: '22px',
+ fontSize: '13px',
  marginRight: '4px',
 };
 
 const dotstyle2 = {
+  color: '#5584B0',
  fontSize: '13px',
  marginRight: '4px',
 };

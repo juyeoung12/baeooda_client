@@ -14,7 +14,10 @@ const FindAccount = () => {
   const handleFindId = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/auth/find-id', { name, email: emailForId });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/find-id`, {
+        name,
+        email: emailForId,
+      });
       if (res.data.success) {
         alert(`✅ 아이디는 "${res.data.username}" 입니다.`);
       } else {
@@ -25,37 +28,35 @@ const FindAccount = () => {
     }
   };
 
-const handleFindPassword = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post('/api/auth/reset-password', {
-      username,
-      email: emailForPw
-    });
+  const handleFindPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
+        username,
+        email: emailForPw,
+      });
 
-    if (res.data.success) {
-      alert(`✅ 임시 비밀번호가 이메일(${emailForPw})로 전송되었습니다.`);
-      navigate('/auth?mode=login');
-    } else {
-      alert('❌ 일치하는 사용자 정보가 없습니다.');
+      if (res.data.success) {
+        alert(`✅ 임시 비밀번호가 이메일(${emailForPw})로 전송되었습니다.`);
+        navigate('/auth?mode=login');
+      } else {
+        alert('❌ 일치하는 사용자 정보가 없습니다.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('❌ 비밀번호 찾기에 실패했습니다.');
     }
-  } catch (err) {
-    console.error(err);
-    alert('❌ 비밀번호 찾기에 실패했습니다.');
-  }
-};
-
+  };
 
   return (
     <div style={styles.wrapper}>
-      {/* 탭 */}
       <div style={styles.tabContainer}>
         <button
           onClick={() => setTab('id')}
           style={{
             ...styles.tab,
             fontWeight: tab === 'id' ? 'bold' : 'normal',
-            color: tab === 'id' ? 'black' : '#999'
+            color: tab === 'id' ? 'black' : '#999',
           }}
         >
           아이디
@@ -66,14 +67,13 @@ const handleFindPassword = async (e) => {
           style={{
             ...styles.tab,
             fontWeight: tab === 'pw' ? 'bold' : 'normal',
-            color: tab === 'pw' ? 'black' : '#999'
+            color: tab === 'pw' ? 'black' : '#999',
           }}
         >
           비밀번호
         </button>
       </div>
 
-      {/* 폼 영역 */}
       {tab === 'id' ? (
         <form onSubmit={handleFindId} style={styles.formId}>
           <input
@@ -166,13 +166,13 @@ const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-   formId: {
+  formId: {
     marginTop: '18px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     width: '280px',
@@ -210,7 +210,7 @@ const styles = {
     textDecoration: 'underline',
     cursor: 'pointer',
     fontSize: '13.5px',
-    padding: '0'
+    padding: '0',
   },
   description: {
     fontSize: '13px',

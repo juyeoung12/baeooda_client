@@ -23,7 +23,7 @@ const SignupForm = () => {
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [emailButtonDisabled, setEmailButtonDisabled] = useState(false);
   const [codeButtonDisabled, setCodeButtonDisabled] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ 중복 제출 방지
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailDomains = ['gmail.com', 'naver.com', 'daum.net', 'kakao.com', 'hanmail.net', 'nate.com'];
   const dropdownRef = useRef(null);
@@ -113,11 +113,12 @@ const SignupForm = () => {
 
   const handleEmailSend = async () => {
     try {
-      const res = await axios.post('/api/email/send', { email: formData.email });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/email/send`, {
+        email: formData.email,
+      });
       alert(res.data?.message || '인증번호 전송 완료');
       setEmailSent(true);
       setEmailButtonDisabled(true);
-
       setCodeVerified(false);
       setCodeButtonDisabled(false);
       setCodeSubmitted(false);
@@ -132,7 +133,7 @@ const SignupForm = () => {
 
   const handleCodeVerify = async () => {
     try {
-      const res = await axios.post('/api/email/verify', {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/email/verify`, {
         email: formData.email,
         code: formData.verificationCode
       });
@@ -151,10 +152,9 @@ const SignupForm = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      await axios.post('/api/auth/signup', formData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, formData);
       alert('회원가입이 완료되었습니다!');
       navigate('/auth?mode=login');
-      return; // ✅ navigate 후 중단
     } catch (err) {
       alert(err.response?.data?.message || '회원가입에 실패했습니다.');
     } finally {
@@ -173,14 +173,11 @@ const SignupForm = () => {
   return (
     <div style={{ maxWidth: '320px', margin: '0 auto', fontFamily: 'sans-serif', position: 'relative' }}>
       <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '18px' }}>회원가입</h2>
-
       <form onSubmit={handleSubmit}>
         <input type="text" name="name" placeholder="이름*" value={formData.name} onChange={handleChange} required style={inputStyle} autoComplete="off" />
-
         <div style={{ display: 'flex', gap: '5px', position: 'relative' }}>
           <input ref={emailInputRef} type="text" name="email" placeholder="이메일*" value={formData.email} onChange={handleChange} required autoComplete="off" style={{ ...inputStyle, width: '210px' }} />
           <button id="email-send-btn" type="button" onClick={handleEmailSend} disabled={!formData.email.includes('@') || emailButtonDisabled} style={createButtonStyle(formData.email.includes('@') && !emailButtonDisabled)}>인증번호 전송</button>
-
           {showDomainList && (
             <ul ref={dropdownRef} style={dropdownStyle} tabIndex={0}>
               {emailDomains.map((domain, index) => (
@@ -191,45 +188,24 @@ const SignupForm = () => {
             </ul>
           )}
         </div>
-
         <div style={{ display: 'flex', gap: '5px' }}>
           <input type="text" name="verificationCode" placeholder="인증번호*" value={formData.verificationCode} onChange={handleChange} style={{ ...inputStyle, width: '210px' }} />
           <button id="code-verify-btn" type="button" onClick={handleCodeVerify} disabled={!formData.verificationCode.trim() || codeButtonDisabled || codeSubmitted} style={createButtonStyle(formData.verificationCode.trim() && !codeButtonDisabled && !codeSubmitted)}>인증번호 확인</button>
         </div>
-
         <input type="text" name="username" placeholder="아이디*" value={formData.username} onChange={handleChange} style={inputStyle} />
         <input type="password" name="password" placeholder="비밀번호*" value={formData.password} onChange={handleChange} style={inputStyle} />
         <input type="password" name="confirmPassword" placeholder="비밀번호 확인*" value={formData.confirmPassword} onChange={handleChange} style={inputStyle} />
-
         {formData.confirmPassword && passwordMatch === false && (
           <p style={{ color: '#E45547', fontSize: '13px', margin: '6px 0 0 4px' }}>비밀번호와 비밀번호 확인이 일치하지 않습니다.</p>
         )}
         {formData.confirmPassword && passwordMatch === true && (
           <p style={{ color: '#4C779F', fontSize: '13px', margin: '6px 0 0 4px' }}>비밀번호가 일치합니다.</p>
         )}
-
-        <button id="submit-btn" type="submit" disabled={!isFormValid || isSubmitting} style={{ ...baseButtonStyle, backgroundColor: isFormValid ? '#d04444' : '#ccc', marginTop: '16px', cursor: isFormValid ? 'pointer' : 'not-allowed' }}>가입하기</button>
+        <button id="submit-btn" type="submit" disabled={!isFormValid || isSubmitting} style={{ ...ButtonStyle, backgroundColor: isFormValid ? '#ED6051' : '#ccc', marginTop: '16px', cursor: isFormValid ? 'pointer' : 'not-allowed' }}>가입하기</button>
       </form>
-
       <div style={{ display: 'flex', gap: '6px', marginTop: '8px', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <p style={{ color: 'rgb(153, 153, 153)', fontSize: '13.5px', margin: '5px 0 0 0' }}>
-          이미 가입된 계정이 있으신가요?
-        </p>
-        <button
-          type="button"
-          onClick={() => navigate('/auth?mode=login')}
-          style={{
-            color: 'rgb(106, 109, 117)',
-            fontSize: '13.5px',
-            fontWeight: 'bold',
-            textDecoration: 'underline',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '0',
-            height: '20px'
-          }}
-        >
+        <p style={{ color: 'rgb(153, 153, 153)', fontSize: '13.5px', margin: '5px 0 0 0' }}>이미 가입된 계정이 있으신가요?</p>
+        <button type="button" onClick={() => navigate('/auth?mode=login')} style={{ color: 'rgb(106, 109, 117)', fontSize: '13.5px', fontWeight: 'bold', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: '0', height: '20px' }}>
           로그인
         </button>
       </div>
@@ -251,7 +227,7 @@ const inputStyle = {
 const baseButtonStyle = {
   padding: '12px 0',
   fontSize: '14px',
-  fontWeight: 'bold',
+  // fontWeight: 'bold',
   color: '#fff',
   border: 'none',
   borderRadius: '6px',
@@ -260,9 +236,18 @@ const baseButtonStyle = {
   width: '100%',
 };
 
+const ButtonStyle = {
+  padding: '13px 0',
+  fontSize: '17px',
+  borderRadius: '6px',
+  color: '#fff',
+  border: 'none',
+  width: '100%',
+}
+
 const createButtonStyle = (isEnabled) => ({
   ...baseButtonStyle,
-  backgroundColor: isEnabled ? '#F35748' : '#ccc',
+  backgroundColor: isEnabled ? '#ED6051' : '#ccc',
   cursor: isEnabled ? 'pointer' : 'not-allowed',
 });
 

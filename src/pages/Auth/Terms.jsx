@@ -123,34 +123,34 @@ export default function Terms() {
         <li style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label>
             <input type="checkbox" checked={checked.service} onChange={() => handleChange('service')} />
-            {' '}<strong><span style={{ color: 'red' }}>*</span>(필수)</strong> 서비스 약관 동의
+            {' '}<strong style={{ fontSize: '14px'}}><span style={{ color: 'red' }}>*</span>(필수)</strong> 서비스 약관 동의
           </label>
           <button onClick={() => openModal('service')} style={arrowStyle}>▶</button>
         </li>
         <li style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label>
             <input type="checkbox" checked={checked.privacy} onChange={() => handleChange('privacy')} />
-            {' '}<strong><span style={{ color: 'red' }}>*</span>(필수)</strong> 개인정보 수집·이용 동의
+            {' '}<strong style={{ fontSize: '14px'}}><span style={{ color: 'red' }}>*</span>(필수)</strong> 개인정보 수집·이용 동의
           </label>
           <button onClick={() => openModal('privacy')} style={arrowStyle}>▶</button>
         </li>
         <li style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label>
             <input type="checkbox" checked={checked.age} onChange={() => handleChange('age')} />
-            {' '}<strong><span style={{ color: 'red' }}>*</span>(필수)</strong> 만 14세 이상입니다.
+            {' '}<strong style={{ fontSize: '14px'}}><span style={{ color: 'red' }}>*</span>(필수)</strong> 만 14세 이상입니다.
           </label>
         </li>
         <li style={{ display: 'flex', justifyContent: 'space-between' }}>
           <label>
             <input type="checkbox" checked={checked.event} onChange={() => handleChange('event')} />
-            {' '}<strong>(선택)</strong> 이벤트 정보 수신 동의
+            {' '}<strong style={{ fontSize: '14px'}}>(선택)</strong> 이벤트 정보 수신 동의
           </label>
           <button onClick={() => openModal('event')} style={arrowStyle}>▶</button>
         </li>
         <li>
           <label>
             <input type="checkbox" checked={checked.marketing} onChange={() => handleChange('marketing')} />
-            {' '}<strong>(선택)</strong> 광고성 정보 수신 동의
+            {' '}<strong style={{ fontSize: '14px'}}>(선택)</strong> 광고성 정보 수신 동의
           </label>
         </li>
       </ul>
@@ -173,7 +173,7 @@ export default function Terms() {
           width: '100%',
           marginTop: '16px',
           padding: '12px 0',
-          backgroundColor: isRequiredAllChecked ? '#F35748' : '#ccc',
+          backgroundColor: isRequiredAllChecked ? '#ED6051' : '#ccc',
           color: '#fff',
           fontSize: '16px',
           border: 'none',

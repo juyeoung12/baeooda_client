@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
+
 :root {
-  font-family: "Noto Sans KR", sans-serif, 'Pretendard-Regular';
   line-height: 1.5;
   font-weight: 400;
+  font-style: normal;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -11,6 +13,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
 }
 
 section {
@@ -39,14 +45,11 @@ body {
 
 body.no-scroll {
   overflow: hidden;
-  padding-right: 17px; /* 윈도우 기본 스크롤 너비 */
+  padding-right: 17px;
 }
 
-/* button {
-  all: unset;
-  cursor: pointer;
-} */
 button {
+  font-family: 'Noto Sans KR';
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -56,9 +59,6 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-button:hover {
-  /* border-color: #646cff; */
 }
 button:focus,
 button:focus-visible {

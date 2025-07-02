@@ -223,7 +223,7 @@ const Header = () => {
                         background: 'none',
                         border: 'none',
                         color: 'black',
-                        fontSize: '16px',
+                        fontSize: '15px',
                         cursor: 'pointer',
                         padding: '12px',
                         fontWeight: 'normal',

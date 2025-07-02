@@ -114,46 +114,47 @@ const CourseList = () => {
                 }}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <div
-                  style={{
-                    width: '226px',
-                    height: '280px',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    transition: 'transform 0.3s',
-                    position: 'relative'
-                  }}
-                  onMouseEnter={e => {
-                    const img = e.currentTarget.querySelector('img');
-                    if (img) img.style.transform = 'scale(1.07)';
-                  }}
-                  onMouseLeave={e => {
-                    const img = e.currentTarget.querySelector('img');
-                    if (img) img.style.transform = 'scale(1)';
-                  }}
-                >
-                  <div
+
+              <div
+                style={{
+                  width: '226px',
+                  height: '270px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s',
+                  position: 'relative',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  padding: '5px 0',
+                }}
+                onMouseEnter={e => {
+                  const img = e.currentTarget.querySelector('img');
+                  if (img) img.style.transform = 'scale(1.07)';
+                }}
+                onMouseLeave={e => {
+                  const img = e.currentTarget.querySelector('img');
+                  if (img) img.style.transform = 'scale(1)';
+                }}
+              >
+                <div style={{ width: '100%', height: '140px', overflow: 'hidden', borderRadius: '10px' }}>
+                  <img
+                    src={course.listImage || course.image}
+                    alt={course.title}
                     style={{
                       width: '100%',
                       height: '140px',
-                      overflow: 'hidden',
-                      borderRadius: '10px'
-                    }}>
-                    <img
-                      src={course.listImage || course.image}
-                      alt={course.title}
-                      style={{
-                        width: '100%',
-                        height: '140px',
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s',
-                      }}
-                    />
-                  </div>
+                      objectFit: 'cover',
+                      transition: 'transform 0.3s',
+                      flexShrink: 0,
+                    }}
+                  />
+                </div>
 
-                  <div style={{ padding: '5px 0' }}>
+                <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', marginTop: '10px' }}>
+                  <div>
                     {course.tag && (
-                      <div style={{ display: 'flex', gap: '7px', margin: '7px 0' }}>
+                      <div style={{ display: 'flex', gap: '7px', marginBottom: '6px' }}>
                         {course.tag.map((t, idx) => (
                           <span
                             key={idx}
@@ -171,35 +172,39 @@ const CourseList = () => {
                         ))}
                       </div>
                     )}
-                    <h3 style={{ fontSize: '14px', fontWeight: '400', margin: '9px 0 0 0' }}>
+
+                    <h3 style={{ fontSize: '14px', fontWeight: '400', margin: '5px 0' }}>
                       {course.title}
                     </h3>
+                  </div>
 
-                    <div
+                  <div
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      display: 'flex',
+                      alignItems: 'center',
+                      // marginTop: '7px',
+                      // marginBottom: '20px',
+                    }}
+                  >
+                    <span style={{ color: '#D45757', marginRight: '6px' }}>{course.discount}</span>
+                    <span
                       style={{
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        color: '#000',
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginTop: '7px'
+                        fontSize: '12px',
+                        textDecoration: 'line-through',
+                        color: '#aaa',
+                        marginRight: '8px',
                       }}
                     >
-                      <span style={{ color: '#D45757', marginRight: '6px' }}>{course.discount}</span>
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          textDecoration: 'line-through',
-                          color: '#aaa',
-                          marginRight: '8px',
-                        }}
-                      >
-                        {course.originalPrice}
-                      </span>
-                      {course.price}
-                    </div>
+                      {course.options?.['1년 수강']?.original}
+                    </span>
+                    <span>{course.options?.['1년 수강']?.sale}</span>
                   </div>
                 </div>
+              </div>
+
               </Link>
             ))}
           </div>
