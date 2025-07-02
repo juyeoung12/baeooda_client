@@ -1,25 +1,30 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite'; // ✅ 이 줄 추가!
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-export default defineConfig({
-   define: {
-    'process.env': process.env, // 필요 시 추가
-  },
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+export default defineConfig(({ mode }) => {
+  const isDev = mode === 'development';
+
+  return {
+      define: {
+        'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
+      },
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        secure: false,
-      }
-    }
-  }
-  
+    ...(isDev && {
+      server: {
+        proxy: {
+          '/api': {
+            target: 'http://localhost:5000',
+            changeOrigin: true,
+            secure: false,
+          },
+        },
+      },
+    }),
+  };
 });

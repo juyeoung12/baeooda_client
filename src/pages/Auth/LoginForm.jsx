@@ -26,6 +26,9 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+      console.log("🔍 API URL ▶", import.meta.env.VITE_API_URL);
+
     try {
       const res = await axios.post(`${API_URL}/api/auth/login`, {
         username,
@@ -33,6 +36,8 @@ const Login = () => {
       }, {
         withCredentials: true
       });
+
+console.log("🔁 서버 응답:", res.data);
 
       const { token, user } = res.data;
 

@@ -54,7 +54,7 @@ const styles = {
   },
   leftSection: {
     width: '40%',
-    backgroundImage: 'url(public/images/auth.jpg)',
+    backgroundImage: 'url(/images/auth.jpg)',
     color: '#fff',
     textAlign: 'center',
     padding: '50px 20px',
